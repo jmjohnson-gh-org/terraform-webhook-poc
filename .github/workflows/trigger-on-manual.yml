@@ -1,0 +1,86 @@
+name: 'Terraform GitOps Workflow'
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  terraform-plan:
+    name: 'Terraform plan'
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.8.0
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Terraform Init Vnet
+      working-directory: ./vnet
+      id: init
+      run: terraform init
+    - name: Terraform Plan Vnet
+      working-directory: ./vnet
+      id: plan
+      run: terraform plan
+    - name: Terraform Init Subnet
+      working-directory: ./vnet
+      id: init
+      run: terraform init
+    - name: Terraform Plan Subnet
+      working-directory: ./subnet
+      id: plan
+      run: terraform plan
+
+  manual-approval:
+    name: 'Manual Approval'
+    runs-on: ubuntu-latest
+    environment: manual-approval
+    needs: terraform-plan
+    steps:
+    - run: echo "Workflow Approved, Starting in 30 seconds"
+    - run: sleep 30
+
+  terraform-apply-vnet:
+    name: 'Terraform Apply Vnet'
+    needs: manual-approval
+    runs-on: ubuntu-latest
+    environment: dev
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Install Terraform # Only need to install it once for it to propogate to all jobs
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.8.0
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Terraform Init
+      working-directory: ./vnet
+      run: terraform init
+    - name: Terraform Apply
+      working-directory: ./vnet
+      run: terraform apply -auto-approve
+
+  terraform-apply-subnet:
+    name: 'Terraform Apply Subnet'
+    needs: terraform-apply-vnet
+    runs-on: ubuntu-latest
+    environment: dev
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Install Terraform # Only need to install it once for it to propogate to all jobs
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.8.0
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Terraform Init
+      working-directory: ./subnet
+      run: terraform init
+    - name: Terraform Apply
+      working-directory: ./subnet
+      run: terraform apply -auto-approve
