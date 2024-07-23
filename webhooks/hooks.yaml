@@ -1,9 +1,3 @@
-- id: webhook
+- id: deployment-approval
   response-message: I got the payload!
-  trigger-rule:
-    - match:
-        type: value
-        value: refs/heads/main
-        parameter:
-          source: payload
-          name: ref
+  execute-command: /home/jjohnson/git/poc/terraform-webhook-poc/webhooks/test.sh
