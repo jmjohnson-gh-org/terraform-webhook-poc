@@ -1,0 +1,9 @@
+- id: webhook
+  response-message: I got the payload!
+  trigger-rule:
+    - match:
+        type: value
+        value: refs/heads/main
+        parameter:
+          source: payload
+          name: ref

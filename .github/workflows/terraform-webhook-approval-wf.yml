@@ -1,8 +1,12 @@
-name: 'TF Trigger on POST Call'
+name: 'Terraform Webhook Approval Workflow'
 
-on:
-  repository_dispatch:
-    types: [trigger_on_post]
+on: 
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'dev'
 
 jobs:
   terraform-plan:
@@ -52,14 +56,14 @@ jobs:
     environment: ${{ github.event.client_payload.environment }}-manual-approval
     needs: terraform-plan
     steps:
-    - run: echo "Workflow Approved, Starting in 30 seconds"
-    - run: sleep 30
+    - run: echo "Workflow Approved, Starting in 5 seconds"
+    - run: sleep 5
 
   terraform-apply-rg:
     name: 'Terraform Apply RG'
     needs: manual-approval
     runs-on: ubuntu-latest
-    environment: ${{ github.event.client_payload.environment }}-plan-apply
+    environment: ${{ github.event.client_payload.environment }}-apply
     steps:
       - name: Azure login
         id: login
@@ -83,7 +87,7 @@ jobs:
     name: 'Terraform Apply Vnet'
     needs: terraform-apply-rg
     runs-on: ubuntu-latest
-    environment: ${{ github.event.client_payload.environment }}-plan-apply
+    environment: ${{ github.event.client_payload.environment }}-apply
     steps:
       - name: Azure login
         id: login
@@ -107,7 +111,7 @@ jobs:
     name: 'Terraform Apply Subnet'
     needs: terraform-apply-vnet
     runs-on: ubuntu-latest
-    environment: ${{ github.event.client_payload.environment }}-plan-apply
+    environment: ${{ github.event.client_payload.environment }}-apply
     steps:
       - name: Azure login
         id: login
