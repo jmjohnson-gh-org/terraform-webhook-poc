@@ -9,8 +9,8 @@ on:
         default: 'dev'
 
 jobs:
-  terraform-plan:
-    name: 'Terraform plan'
+  terraform-plan-rg:
+    name: 'Terraform plan RG'
     runs-on: ubuntu-latest
     environment: ${{ github.event.client_payload.environment }}-plan
     steps:
@@ -33,6 +33,23 @@ jobs:
         working-directory: ./rg
         id: plan
         run: terraform plan
+
+  terraform-plan-vnet:
+    name: 'Terraform plan Vnet'
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.client_payload.environment }}-plan
+    steps:
+      - name: Azure login
+        id: login
+        uses: azure/login@v1.4.3
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.8.0
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Terraform Init Vnet
         working-directory: ./vnet
         id: init
@@ -41,6 +58,23 @@ jobs:
         working-directory: ./vnet
         id: plan
         run: terraform plan
+
+  terraform-plan-subnet:
+    name: 'Terraform plan Subnet'
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.client_payload.environment }}-plan
+    steps:
+      - name: Azure login
+        id: login
+        uses: azure/login@v1.4.3
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.8.0
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Terraform Init Subnet
         working-directory: ./subnet
         id: init
@@ -54,7 +88,10 @@ jobs:
     name: 'Manual Approval'
     runs-on: ubuntu-latest
     environment: ${{ github.event.client_payload.environment }}-manual-approval
-    needs: terraform-plan
+    needs: 
+      - terraform-plan-rg
+      - terraform-plan-vnet
+      - terraform-plan-subnet
     steps:
     - run: echo "Workflow Approved, Starting in 5 seconds"
     - run: sleep 5
