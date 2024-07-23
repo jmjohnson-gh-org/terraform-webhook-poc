@@ -12,7 +12,7 @@ jobs:
   terraform-plan-rg:
     name: 'Terraform plan RG'
     runs-on: ubuntu-latest
-    environment: ${{ github.event.client_payload.environment }}-plan
+    environment: ${{ inputs.environment }}-plan
     steps:
       - name: Azure login
         id: login
@@ -37,7 +37,7 @@ jobs:
   terraform-plan-vnet:
     name: 'Terraform plan Vnet'
     runs-on: ubuntu-latest
-    environment: ${{ github.event.client_payload.environment }}-plan
+    environment: ${{ inputs.environment }}-plan
     steps:
       - name: Azure login
         id: login
@@ -62,7 +62,7 @@ jobs:
   terraform-plan-subnet:
     name: 'Terraform plan Subnet'
     runs-on: ubuntu-latest
-    environment: ${{ github.event.client_payload.environment }}-plan
+    environment: ${{ inputs.environment }}-plan
     steps:
       - name: Azure login
         id: login
@@ -87,7 +87,7 @@ jobs:
   manual-approval:
     name: 'Manual Approval'
     runs-on: ubuntu-latest
-    environment: ${{ github.event.client_payload.environment }}-manual-approval
+    environment: ${{ inputs.environment }}-manual-approval
     needs: 
       - terraform-plan-rg
       - terraform-plan-vnet
@@ -100,7 +100,7 @@ jobs:
     name: 'Terraform Apply RG'
     needs: manual-approval
     runs-on: ubuntu-latest
-    environment: ${{ github.event.client_payload.environment }}-apply
+    environment: ${{ inputs.environment }}-apply
     steps:
       - name: Azure login
         id: login
@@ -124,7 +124,7 @@ jobs:
     name: 'Terraform Apply Vnet'
     needs: terraform-apply-rg
     runs-on: ubuntu-latest
-    environment: ${{ github.event.client_payload.environment }}-apply
+    environment: ${{ inputs.environment }}-apply
     steps:
       - name: Azure login
         id: login
@@ -148,7 +148,7 @@ jobs:
     name: 'Terraform Apply Subnet'
     needs: terraform-apply-vnet
     runs-on: ubuntu-latest
-    environment: ${{ github.event.client_payload.environment }}-apply
+    environment: ${{ inputs.environment }}-apply
     steps:
       - name: Azure login
         id: login
