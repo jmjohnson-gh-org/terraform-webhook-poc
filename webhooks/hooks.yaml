@@ -1,3 +1,3 @@
 - id: deployment-approval
-  response-message: I got the payload!
-  execute-command: /home/jjohnson/git/poc/terraform-webhook-poc/webhooks/test.sh
+  response-message: Approving deployment
+  execute-command: /home/adminuser/webhookswebhooks/approve-deployment.sh

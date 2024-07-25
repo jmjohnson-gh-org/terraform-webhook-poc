@@ -34,55 +34,55 @@ jobs:
         id: plan
         run: terraform plan
 
-  terraform-plan-vnet:
-    name: 'Terraform plan Vnet'
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}-plan
-    steps:
-      - name: Azure login
-        id: login
-        uses: azure/login@v1.4.3
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Install Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.8.0
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Terraform Init Vnet
-        working-directory: ./vnet
-        id: init
-        run: terraform init
-      - name: Terraform Plan Vnet
-        working-directory: ./vnet
-        id: plan
-        run: terraform plan
+  # terraform-plan-vnet:
+  #   name: 'Terraform plan Vnet'
+  #   runs-on: ubuntu-latest
+  #   environment: ${{ inputs.environment }}-plan
+  #   steps:
+  #     - name: Azure login
+  #       id: login
+  #       uses: azure/login@v1.4.3
+  #       with:
+  #         creds: ${{ secrets.AZURE_CREDENTIALS }}
+  #     - name: Install Terraform
+  #       uses: hashicorp/setup-terraform@v2
+  #       with:
+  #         terraform_version: 1.8.0
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #     - name: Terraform Init Vnet
+  #       working-directory: ./vnet
+  #       id: init
+  #       run: terraform init
+  #     - name: Terraform Plan Vnet
+  #       working-directory: ./vnet
+  #       id: plan
+  #       run: terraform plan
 
-  terraform-plan-subnet:
-    name: 'Terraform plan Subnet'
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}-plan
-    steps:
-      - name: Azure login
-        id: login
-        uses: azure/login@v1.4.3
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Install Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.8.0
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Terraform Init Subnet
-        working-directory: ./subnet
-        id: init
-        run: terraform init
-      - name: Terraform Plan Subnet
-        working-directory: ./subnet
-        id: plan
-        run: terraform plan
+  # terraform-plan-subnet:
+  #   name: 'Terraform plan Subnet'
+  #   runs-on: ubuntu-latest
+  #   environment: ${{ inputs.environment }}-plan
+  #   steps:
+  #     - name: Azure login
+  #       id: login
+  #       uses: azure/login@v1.4.3
+  #       with:
+  #         creds: ${{ secrets.AZURE_CREDENTIALS }}
+  #     - name: Install Terraform
+  #       uses: hashicorp/setup-terraform@v2
+  #       with:
+  #         terraform_version: 1.8.0
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #     - name: Terraform Init Subnet
+  #       working-directory: ./subnet
+  #       id: init
+  #       run: terraform init
+  #     - name: Terraform Plan Subnet
+  #       working-directory: ./subnet
+  #       id: plan
+  #       run: terraform plan
 
   manual-approval:
     name: 'Manual Approval'
