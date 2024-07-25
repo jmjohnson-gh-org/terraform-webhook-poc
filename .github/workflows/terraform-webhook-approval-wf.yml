@@ -90,8 +90,8 @@ jobs:
     environment: ${{ inputs.environment }}-manual-approval
     needs: 
       - terraform-plan-rg
-      - terraform-plan-vnet
-      - terraform-plan-subnet
+      # - terraform-plan-vnet
+      # - terraform-plan-subnet
     steps:
     - run: echo "Workflow Approved, Starting in 5 seconds"
     - run: sleep 5
