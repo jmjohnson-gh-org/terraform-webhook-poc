@@ -2,9 +2,13 @@ provider "azurerm" {
   features {}
 }
 
+data "azurerm_virtual_network" "this" {
+  name                = "webhook-demo-vnet"
+  resource_group_name = "webhook-demo-rg"
+}
+
 resource "azurerm_subnet" "this" {
-  name                 = "service-now-demo-subnet"
-  virtual_network_name = "service-now-demo-vnet"
-  resource_group_name  = "service-now-demo-rg"
+  name                 = "webhook-demo-subnet"
+  resource_group_name  = "webhook-demo-rg"
   address_prefixes     = ["10.0.0.0/24"]
 }

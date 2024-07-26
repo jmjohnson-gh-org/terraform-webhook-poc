@@ -3,6 +3,6 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "this" {
-  name     = "service-now-demo-rg"
+  name     = "webhook-demo-rg"
   location = "Eastus"
 }
