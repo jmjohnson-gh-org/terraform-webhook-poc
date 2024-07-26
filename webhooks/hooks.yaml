@@ -1,3 +1,12 @@
 - id: deployment-approval
   response-message: Approving deployment
-  execute-command: /home/adminuser/webhookswebhooks/approve-deployment.sh
+  execute-command: /home/adminuser/webhooks/approve-deployment.sh
+  pass-arguments-to-command:
+    - source: payload
+      name: deployment_callback_url
+    - source: payload
+      name: deployment.environment
+    - source: payload
+      name: installation.id
+    - source: header
+      name: X-GitHub-Event
